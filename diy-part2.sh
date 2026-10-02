@@ -10,16 +10,17 @@
 # See /LICENSE for more information.
 #
 
-# 1. 删除会和 kenzok8 small 源冲突的上游包
-rm -rf feeds/luci/applications/luci-app-mosdns
-rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,sing*,smartdns}
-rm -rf feeds/packages/utils/v2dat
+# 1. 删除 OpenWrt feeds 自带的核心库，避免和 PassWall 官方源冲突
+rm -rf feeds/packages/net/{xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,v2ray-plugin,xray-plugin,geoview,shadow-tls}
 
-# 2. 替换 golang（用 sbwml 的 27.x）
+# 2. 删除 openwrt feeds 过时的 luci-app-passwall
+rm -rf feeds/luci/applications/luci-app-passwall
+
+# 3. 替换 golang（新版 Xray-core 要求 Go 1.23+）
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 27.x feeds/packages/lang/golang
 
-# 3. 修改 MTK Wi-Fi 默认 SSID 和密码
+# 4. 修改 MTK Wi-Fi 默认 SSID 和密码
 sed -i 's/ImmortalWrt-2.4G/666999/g' package/mtk/applications/mtwifi-cfg/files/mtwifi.sh
 sed -i 's/ImmortalWrt-5G/666999_/g' package/mtk/applications/mtwifi-cfg/files/mtwifi.sh
 sed -i 's/encryption=none/encryption=psk2/' package/mtk/applications/mtwifi-cfg/files/mtwifi.sh
